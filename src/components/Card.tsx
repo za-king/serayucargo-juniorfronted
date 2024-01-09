@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   MdFavorite,
   MdFavoriteBorder,
@@ -7,16 +7,24 @@ import {
 } from "react-icons/md";
 import { imageUrl } from "../api/service";
 import { useNavigate } from "react-router-dom";
-import { useMovieHook } from "../hooks/useMovie.hook";
+import Contextpage from "../context/Contextpage";
 import { apiUrl, accesToken } from "../api/service";
+
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Card = ({ movieData }: any) => {
   const navigate = useNavigate();
 
   const [isFavorite, setIsFavorite] = useState<boolean | null>(null);
   const [isWatchlist, setIsWatchlist] = useState<boolean | null>(null);
 
+  const { isAuth, getUser, setIsLoading }: any = useContext(Contextpage);
+  useEffect(() => {
+    getUser();
+  }, [isAuth]);
+
   const handleFavoriteButton = async (movie_id: number) => {
-    const url = `${apiUrl}3/account/16668139/favorite?session_id=db89673af2ca315a713b8e775c44a91320137026`;
+    const url = `${apiUrl}3/account/16668139/favorite?session_id=${isAuth}`;
     const option = {
       method: "POST",
       headers: {
@@ -31,12 +39,21 @@ const Card = ({ movieData }: any) => {
       }),
     };
 
-    const response = await fetch(url, option);
-    const data = await response.json();
-    console.log(data);
+    if (isAuth != null) {
+      const response = await fetch(url, option);
+      const data = await response.json();
+      console.log(data);
+      toast.success("Succes Add to Favorite !", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+    } else {
+      toast.error("Your not login", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+    }
   };
   const handleWatchlistButton = async (movie_id: number) => {
-    const url = `${apiUrl}3/account/16668139/watchlist?session_id=db89673af2ca315a713b8e775c44a91320137026`;
+    const url = `${apiUrl}3/account/16668139/watchlist?session_id=${isAuth}`;
     const option = {
       method: "POST",
       headers: {
@@ -51,9 +68,18 @@ const Card = ({ movieData }: any) => {
       }),
     };
 
-    const response = await fetch(url, option);
-    const data = await response.json();
-    console.log(data);
+    if (isAuth != null) {
+      const response = await fetch(url, option);
+      const data = await response.json();
+      console.log(data);
+      toast.success("Succes Add to Watchlist !", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+    } else {
+      toast.error("Your Not login", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+    }
   };
 
   const handleNavigate = (id: number) => {

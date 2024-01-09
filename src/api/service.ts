@@ -5,3 +5,5 @@ export const apiKey = process.env.REACT_APP_API_KEY;
 export const imageUrl = process.env.REACT_APP_IMAGEURL;
 
 export const accountId = process.env.REACT_APP_ACCOUNT_ID
+export const accountUserName = process.env.REACT_APP_USERNAME
+export const accountPassword = process.env.REACT_APP_PASSWORD

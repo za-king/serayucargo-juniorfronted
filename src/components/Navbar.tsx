@@ -1,11 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Search from "./Search";
-import { useAuthHook } from "../hooks/useAuth.hook";
+import Contextpage from "../context/Contextpage";
+
 const Navbar = () => {
-  const { Login } = useAuthHook();
+  const { Login, Logout, isAuth, getUser }: any = useContext(Contextpage);
   const handleLogin = () => {
     Login();
   };
+  const handleLogout = () => {
+    Logout();
+  };
+
+  useEffect(() => {
+    getUser();
+  }, [isAuth, getUser]);
   return (
     <div className="navbar   bg-[#0EA5E9] xl:container">
       <div className="flex-none md:hidden">
@@ -61,6 +69,9 @@ const Navbar = () => {
               <li>
                 <button onClick={handleLogin}>Login</button>
               </li>
+              <li>
+                <button onClick={handleLogout}>Logout</button>
+              </li>
             </ul>
           </div>
         </div>
@@ -85,9 +96,15 @@ const Navbar = () => {
             <a href="/watchlist">Watchlist</a>
           </li>
 
-          <li>
-            <button onClick={handleLogin}>Login</button>
-          </li>
+          {isAuth === null ? (
+            <li>
+              <button onClick={handleLogin}>Login</button>
+            </li>
+          ) : (
+            <li>
+              <button onClick={handleLogout}>Logout</button>
+            </li>
+          )}
         </ul>
       </div>
     </div>

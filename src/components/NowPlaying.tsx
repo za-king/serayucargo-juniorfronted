@@ -1,34 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { apiUrl, accesToken } from "../api/service";
+import React, { useState, useEffect, useContext } from "react";
+
 import { movieProp } from "../types/movie.type";
 import Card from "./Card";
 import SkeletonLoadingCard from "./SkeletonLoadingCard";
+import Contextpage from "../context/Contextpage";
 const NowPlaying = () => {
-  const [moviesData, setMoviesData] = useState<movieProp[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isError, setIsError] = useState();
+  const { getNowPlayingMovie, isLoading, nowMoviesData }: any =
+    useContext(Contextpage);
   useEffect(() => {
-    const getNowPlayingMovie = async () => {
-      const url = `${apiUrl}3/movie/now_playing?language=en-US&page=1`;
-      const option = {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization: `Bearer ${accesToken}`,
-        },
-      };
-      setIsLoading(true);
-      try {
-        const response = await fetch(url, option);
-        const data = await response.json();
-        setMoviesData(data.results);
-      } catch (error: any) {
-        setIsError(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     getNowPlayingMovie();
   }, []);
 
@@ -51,7 +30,7 @@ const NowPlaying = () => {
       <h1 className="text-4xl font-semibold mb-12 ">Now Playing</h1>
       <div className="">
         <div className="flex  gap-4 overflow-x-auto  mt-5 h-full  justify-center items-center justify-items-center">
-          {moviesData.map((movie: movieProp, index: number) => {
+          {nowMoviesData.map((movie: movieProp, index: number) => {
             return (
               <div key={index}>
                 <Card movieData={movie} />

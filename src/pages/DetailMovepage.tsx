@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Layout from "../components/Layout";
 import { apiKey, accesToken, apiUrl, imageUrl } from "../api/service";
 import { useParams } from "react-router-dom";
@@ -11,6 +11,8 @@ import {
   MdOutlineTurnedInNot,
   MdOutlineTurnedIn,
 } from "react-icons/md";
+import Contextpage from "../context/Contextpage";
+import { toast } from "react-toastify";
 
 function DetailMovepage() {
   const [moviesData, setMoviesData] = useState<any>({});
@@ -18,8 +20,73 @@ function DetailMovepage() {
   const [isWatchlist, setIsWatchlist] = useState<boolean | null>(null);
   const [isRating, setIsRating] = useState<string | null>(null);
   let { id } = useParams();
+
+  const { isAuth, getUser, setIsLoading }: any = useContext(Contextpage);
   useEffect(() => {
-    const getNowPlayingMovie = async () => {
+    getUser();
+  }, [isAuth]);
+
+  const handleFavoriteButton = async (movie_id: number) => {
+    const url = `${apiUrl}3/account/16668139/favorite?session_id=${isAuth}`;
+    const option = {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        Authorization: `Bearer ${accesToken}`,
+      },
+      body: JSON.stringify({
+        media_type: "movie",
+        media_id: movie_id,
+        favorite: true,
+      }),
+    };
+
+    if (isAuth != null) {
+      const response = await fetch(url, option);
+      const data = await response.json();
+      console.log(data);
+      toast.success("Succes Add to Favorite !", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+    } else {
+      toast.error("Your not login", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+    }
+  };
+  const handleWatchlistButton = async (movie_id: number) => {
+    const url = `${apiUrl}3/account/16668139/watchlist?session_id=${isAuth}`;
+    const option = {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        Authorization: `Bearer ${accesToken}`,
+      },
+      body: JSON.stringify({
+        media_type: "movie",
+        media_id: movie_id,
+        watchlist: true,
+      }),
+    };
+
+    if (isAuth != null) {
+      const response = await fetch(url, option);
+      const data = await response.json();
+      console.log(data);
+      toast.success("Succes Add to Watchlist !", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+    } else {
+      toast.error("Your Not login", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+    }
+  };
+
+  useEffect(() => {
+    const getMovieByIdMovie = async () => {
       const url = `${apiUrl}3/movie/${id}?language=en-US`;
       const option = {
         method: "GET",
@@ -33,7 +100,7 @@ function DetailMovepage() {
       setMoviesData(data);
     };
 
-    getNowPlayingMovie();
+    getMovieByIdMovie();
   }, [id]);
 
   const handleRatingMovie = async () => {
@@ -99,14 +166,22 @@ function DetailMovepage() {
                 <div>
                   {" "}
                   <div className="flex b">
-                    <button>
+                    <button
+                      onClick={() => {
+                        handleWatchlistButton(moviesData.id);
+                      }}
+                    >
                       {isWatchlist ? (
                         <MdOutlineTurnedIn size={30} />
                       ) : (
                         <MdOutlineTurnedInNot size={30} />
                       )}
                     </button>
-                    <button>
+                    <button
+                      onClick={() => {
+                        handleFavoriteButton(moviesData.id);
+                      }}
+                    >
                       {isFavorite ? (
                         <MdFavorite size={30} />
                       ) : (
