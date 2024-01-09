@@ -196,7 +196,9 @@ export function MovieProvider({ children }: any) {
   useEffect(() => {
     getFavoriteMovie();
     getWatchlistMovie();
-  }, []);
+    getNowPlayingMovie();
+    getTopRatedMovie();
+  }, [isAuth]);
 
   return (
     <Contextpage.Provider

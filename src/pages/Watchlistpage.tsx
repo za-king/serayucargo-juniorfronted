@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { apiUrl, accesToken } from "../api/service";
 import { movieProp } from "../types/movie.type";
 import Card from "../components/Card";
 import SkeletonLoadingCard from "../components/SkeletonLoadingCard";

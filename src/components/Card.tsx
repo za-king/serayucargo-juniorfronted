@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const Card = ({ movieData }: any) => {
   const navigate = useNavigate();
+  console.log(movieData);
 
   const [isFavorite, setIsFavorite] = useState<boolean | null>(null);
   const [isWatchlist, setIsWatchlist] = useState<boolean | null>(null);
