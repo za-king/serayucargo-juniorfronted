@@ -1,16 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
-
 import { movieProp } from "../types/movie.type";
 import Card from "./Card";
 import SkeletonLoadingCard from "./SkeletonLoadingCard";
-import Contextpage from "../context/Contextpage";
-const NowPlaying = () => {
-  const { getNowPlayingMovie, isLoading, nowMoviesData }: any =
-    useContext(Contextpage);
-  useEffect(() => {
-    getNowPlayingMovie();
-  }, []);
 
+const NowPlaying = ({ isLoading, nowMoviesData }: any) => {
   if (isLoading) {
     return (
       <div className="my-12">

@@ -180,11 +180,12 @@ export function MovieProvider({ children }: any) {
 
     // const response = await fetch(url, option);
     // const data = await response.json();
+
+    getUser();
     sessionStorage.removeItem("session_id");
     toast.success("Logout Succes !", {
       position: toast.POSITION.BOTTOM_RIGHT,
     });
-    getUser();
     navigate("/");
   };
 
@@ -198,6 +199,7 @@ export function MovieProvider({ children }: any) {
     getWatchlistMovie();
     getNowPlayingMovie();
     getTopRatedMovie();
+    getUser();
   }, [isAuth]);
 
   return (

@@ -66,12 +66,15 @@ const Navbar = () => {
                 <a href="/watchlist">Watchlist</a>
               </li>
 
-              <li>
-                <button onClick={handleLogin}>Login</button>
-              </li>
-              <li>
-                <button onClick={handleLogout}>Logout</button>
-              </li>
+              {isAuth === null ? (
+                <li>
+                  <button onClick={handleLogin}>Login</button>
+                </li>
+              ) : (
+                <li>
+                  <button onClick={handleLogout}>Logout</button>
+                </li>
+              )}
             </ul>
           </div>
         </div>

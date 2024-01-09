@@ -3,14 +3,7 @@ import Contextpage from "../context/Contextpage";
 import { movieProp } from "../types/movie.type";
 import Card from "./Card";
 import SkeletonLoadingCard from "./SkeletonLoadingCard";
-const TopRated = () => {
-  const { getTopRatedMovie, isLoading, topMoviesData }: any =
-    useContext(Contextpage);
-
-  useEffect(() => {
-    getTopRatedMovie();
-  }, []);
-
+const TopRated = ({ topMoviesData, isLoading }: any) => {
   if (isLoading) {
     return (
       <div className="my-12">

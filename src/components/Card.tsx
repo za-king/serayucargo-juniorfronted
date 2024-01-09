@@ -9,20 +9,45 @@ import { imageUrl } from "../api/service";
 import { useNavigate } from "react-router-dom";
 import Contextpage from "../context/Contextpage";
 import { apiUrl, accesToken } from "../api/service";
-
+import { movieProp } from "../types/movie.type";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const Card = ({ movieData }: any) => {
   const navigate = useNavigate();
-  console.log(movieData);
 
   const [isFavorite, setIsFavorite] = useState<boolean | null>(null);
   const [isWatchlist, setIsWatchlist] = useState<boolean | null>(null);
 
-  const { isAuth, getUser, setIsLoading }: any = useContext(Contextpage);
+  const {
+    isAuth,
+    getUser,
+    setIsLoading,
+    getFavoriteMovie,
+    getWatchlistMovie,
+    watchlistMoviesData,
+    favoriteMoviesData,
+  }: any = useContext(Contextpage);
+
   useEffect(() => {
     getUser();
-  }, [isAuth]);
+    handleWatchlistLogic(movieData.id);
+    handleFavoriteLogic(movieData.id);
+  }, [isAuth, isWatchlist, isFavorite]);
+
+  const handleWatchlistLogic = async (movie_id: number) => {
+    (await watchlistMoviesData?.filter(
+      (movie: movieProp) => movie?.id === movie_id
+    ).length) > 0
+      ? setIsWatchlist(true)
+      : setIsWatchlist(false);
+  };
+  const handleFavoriteLogic = async (movie_id: number) => {
+    (await favoriteMoviesData?.filter(
+      (movie: movieProp) => movie?.id === movie_id
+    ).length) > 0
+      ? setIsFavorite(true)
+      : setIsFavorite(false);
+  };
 
   const handleFavoriteButton = async (movie_id: number) => {
     const url = `${apiUrl}3/account/16668139/favorite?session_id=${isAuth}`;

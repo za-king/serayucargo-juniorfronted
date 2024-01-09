@@ -124,7 +124,6 @@ function DetailMovepage() {
     return format;
   };
 
-  console.log(moviesData);
   return (
     <Layout>
       <div className="min-h-screen  ">
